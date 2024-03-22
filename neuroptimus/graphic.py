@@ -1,6 +1,8 @@
 import sys
 from traceHandler import sizeError
 try:
+    import matplotlib
+    matplotlib.use("Qt5Agg")
     import matplotlib.pyplot as plt
     from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
     from matplotlib.figure import Figure
@@ -14,10 +16,32 @@ import numpy
 import os.path
 from functools import partial
 import re
+import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QToolTip, QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog , QTableWidgetItem , QSizePolicy , QVBoxLayout, QGroupBox
+from PyQt5.QtWidgets import QMainWindow, QToolTip, QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog , QTableWidgetItem , QSizePolicy , QVBoxLayout, QGroupBox
 from PyQt5.QtGui import *
+from PyQt5.QtCore import QThread, pyqtSignal
+import warnings
+warnings.simplefilter("ignore", UserWarning)
+
+class FittingThread(QThread):
+    finished = pyqtSignal()
+    error = pyqtSignal(str)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def run(self):
+        try:
+            # Call the runsim method
+            self.parent().runsim()
+
+            # Emit the finished signal
+            self.finished.emit()
+        except Exception as e:
+            # Emit the error signal with the error message
+            self.error.emit(str(e))
 
 
 def popup(message):
@@ -37,7 +61,7 @@ def popup(message):
 
 
 
-class Ui_Neuroptimus(object):
+class Ui_Neuroptimus(QMainWindow):
     def __init__(self,*args):
         super().__init__(*args)
 
@@ -48,142 +72,164 @@ class Ui_Neuroptimus(object):
         """
         
 
+       
+        
+
         Neuroptimus.setObjectName("Neuroptimus")
         Neuroptimus.resize(800, 589)
-        Neuroptimus.setSizePolicy(QtWidgets.QSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding))
+        Neuroptimus.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        # setting the minimum to be suitable to the device screen, by getting the screen size and setting the minimum to be 50% of it
+        WINDOW2SCREEN_RATIO = 0.5
+        # screen = QtWidgets.QDesktopWidget().screenGeometry()
+        # Neuroptimus.setMinimumSize(QtCore.QSize(screen.width() * WINDOW2SCREEN_RATIO, screen.height() * WINDOW2SCREEN_RATIO))
+        
+
+
+
+
         self.centralwidget = QtWidgets.QWidget(Neuroptimus)
         self.centralwidget.setObjectName("centralwidget")
         Neuroptimus.setCentralWidget(self.centralwidget)
+
         self.laybox = QtWidgets.QVBoxLayout(self.centralwidget)
-        
+        self.laybox.setContentsMargins(0, 0, 0, 0)
+        self.laybox.setSpacing(0)
+
         self.tabwidget = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabwidget.setGeometry(QtCore.QRect(0, 0, 771, 551))
         self.tabwidget.setObjectName("tabwidget")
+        self.tabwidget.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.laybox.addWidget(self.tabwidget)
-        self.tabwidget.setSizePolicy(QtWidgets.QSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding))
-                #filetab 1
-        
+
+        # filetab 1
         self.filetab = QtWidgets.QWidget()
-       
         self.filetab.setObjectName("filetab")
-        self.intvalidator = QIntValidator()        
+
+        self.intvalidator = QIntValidator()
+        self.doublevalidator = QDoubleValidator()
+
         self.size_ctrl = QtWidgets.QLineEdit(self.filetab)
-        self.size_ctrl.setGeometry(QtCore.QRect(10, 230, 221, 22))
         self.size_ctrl.setObjectName("size_ctrl")
         self.size_ctrl.setValidator(self.intvalidator)
-        self.doublevalidator = QDoubleValidator()
+
         self.length_ctrl = QtWidgets.QLineEdit(self.filetab)
-        self.length_ctrl.setGeometry(QtCore.QRect(10, 280, 221, 22))
         self.length_ctrl.setObjectName("length_ctrl")
         self.length_ctrl.setValidator(self.doublevalidator)
+
         self.freq_ctrl = QtWidgets.QLineEdit(self.filetab)
-        self.freq_ctrl.setGeometry(QtCore.QRect(10, 330, 221, 22))
         self.freq_ctrl.setObjectName("freq_ctrl")
         self.freq_ctrl.setValidator(self.doublevalidator)
+
         self.label_3 = QtWidgets.QLabel(self.filetab)
-        self.label_3.setGeometry(QtCore.QRect(10, 130, 200, 16))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
+
         self.label_4 = QtWidgets.QLabel(self.filetab)
-        self.label_4.setGeometry(QtCore.QRect(10, 260, 250, 16))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
+
         self.label_5 = QtWidgets.QLabel(self.filetab)
-        self.label_5.setGeometry(QtCore.QRect(10, 210, 250, 16))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu")
-        font.setPointSize(11)
-        font.setBold(True)
-        font.setWeight(75)
+
         self.label_7 = QtWidgets.QLabel(self.filetab)
-        self.label_7.setGeometry(QtCore.QRect(250, 210, 120, 16))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
+
         self.pushButton_3 = QtWidgets.QPushButton(self.filetab)
-        self.pushButton_3.setGeometry(QtCore.QRect(10, 400, 80, 22))
         self.pushButton_3.setObjectName("pushButton_3")
+
         self.label_2 = QtWidgets.QLabel(self.filetab)
-        self.label_2.setGeometry(QtCore.QRect(10, 80, 180, 16))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
+
         self.base_dir_controll = QtWidgets.QPushButton(self.filetab)
-        self.base_dir_controll.setGeometry(QtCore.QRect(240, 150, 80, 22))
         self.base_dir_controll.setObjectName("base_dir_controll")
+
         self.label_6 = QtWidgets.QLabel(self.filetab)
-        self.label_6.setGeometry(QtCore.QRect(10, 310, 320, 16))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
+
         self.lineEdit_folder = QtWidgets.QLineEdit(self.filetab)
-        self.lineEdit_folder.setGeometry(QtCore.QRect(10, 150, 221, 22))
         self.lineEdit_folder.setObjectName("lineEdit_2")
+
         self.type_selector = QtWidgets.QComboBox(self.filetab)
-        self.type_selector.setGeometry(QtCore.QRect(500, 100, 120, 22))
         self.type_selector.setObjectName("type_selector")
         self.type_selector.addItem("")
         self.type_selector.addItem("")
         self.type_selector.addItem("")
         self.type_selector.addItem("")
+
         self.input_file_controll = QtWidgets.QPushButton(self.filetab)
-        self.input_file_controll.setGeometry(QtCore.QRect(240, 100, 80, 22))
         self.input_file_controll.setObjectName("pushButton")
+
         self.time_checker = QtWidgets.QCheckBox(self.filetab)
-        self.time_checker.setGeometry(QtCore.QRect(340, 100, 121, 20))
         self.time_checker.setObjectName("time_checker")
+
         self.dropdown = QtWidgets.QComboBox(self.filetab)
-        self.dropdown.setGeometry(QtCore.QRect(240, 230, 61, 22))
         self.dropdown.setObjectName("dropdown")
         self.dropdown.addItem("uV")
         self.dropdown.addItem("mV")
         self.dropdown.addItem("V")
+
         self.lineEdit_file = QtWidgets.QLineEdit(self.filetab)
-        self.lineEdit_file.setGeometry(QtCore.QRect(10, 100, 221, 22))
         self.lineEdit_file.setObjectName("lineEdit")
+
         self.model = QStandardItemModel(0, 1)
+
         self.widget = QtWidgets.QWidget(self.filetab)
-        self.widget.setGeometry(QtCore.QRect(290, 270, 331, 200))
         self.widget.setObjectName("widget")
+
         self.input_tree = QtWidgets.QScrollArea(self.filetab)
-        self.input_tree.setGeometry(QtCore.QRect(370, 130, 250, 100))
+        self.input_tree.setObjectName("input_tree")
+
         self.input_label = QtWidgets.QLabel(self.filetab)
-        self.input_label.setGeometry(QtCore.QRect(370, 130, 250, 100))
+        self.input_label.setObjectName("input_label")
+
+        # Use a QGridLayout to arrange the widgets in a grid
+        self.layout = QtWidgets.QGridLayout(self.filetab)
+        #create new widget Qlabel name it  input_type_label at 0 ,0 
+        self.input_type_label = QtWidgets.QLabel(self.filetab)
+        self.input_type_label.setObjectName("input_type_label")
+        self.input_type_label.setText("Input Type")
+
+
+        self.layout.addWidget(self.input_type_label, 0, 0, 1, 1)
+        self.layout.addWidget(self.type_selector, 0, 1, 1, 1)
+
+
+        self.layout.addWidget(self.label_2, 1, 0, 1, 1)
+        self.layout.addWidget(self.lineEdit_file, 1, 1, 1, 1)
+        self.layout.addWidget(self.input_file_controll, 1, 2, 1, 1)
+        self.layout.addWidget(self.time_checker, 1, 3, 1, 1)
+
+        self.layout.addWidget(self.label_3, 2, 0, 1, 1) #Base Directory
+        self.layout.addWidget(self.lineEdit_folder, 2, 1, 1, 2)
+        self.layout.addWidget(self.base_dir_controll, 2, 3, 1, 1)
+
+
+
+        self.layout.addWidget(self.label_5, 3, 0, 1, 1) #n of traces label
+        self.layout.addWidget(self.size_ctrl, 3, 1, 1, 1) #n of traces input
+        self.layout.addWidget(self.label_7, 3, 2, 1, 1,QtCore.Qt.AlignHCenter ) #units label, align center
         
+        self.layout.addWidget(self.dropdown, 3, 3, 1, 1) #units dropdown
 
+
+
+        self.layout.addWidget(self.label_4, 4, 0, 1, 1)
+        self.layout.addWidget(self.length_ctrl, 4, 1, 1, 1)
+        self.layout.addWidget(self.label_6, 4, 2, 1, 1)
+        self.layout.addWidget(self.freq_ctrl, 4, 3, 1, 1)
+
+
+        self.layout.addWidget(self.pushButton_3, 5, 0, 1, 2)
         
+        self.layout.addWidget(self.input_tree, 6, 0, 1, 2)
+        self.layout.addWidget(self.widget, 6, 2, 1, 2)
 
+        #make all buttons in this tab the same size
+        for widget in self.filetab.findChildren(QtWidgets.QPushButton):
+            widget.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
 
-        #model tab 
+        self.filetab.setLayout(self.layout)
+
+        self.tabwidget.addTab(self.filetab, "File Tab")
+
+        # #model tab 
         self.tabwidget.addTab(self.filetab, "")
         self.modeltab = QtWidgets.QWidget()
         self.modeltab.setObjectName("modeltab")
@@ -268,9 +314,57 @@ class Ui_Neuroptimus(object):
         self.remover.setGeometry(QtCore.QRect(460, 280, 80, 22))
         self.remover.setObjectName("remover")
         self.remover.setEnabled(False)
+
+
+
+       
+
+        self.layout = QtWidgets.QGridLayout(self.modeltab)
         
+        self.layout.addWidget(self.dd_type, 0, 0, 1, 3) #simulator
+
+        self.layout.addWidget(self.label_24, 1, 0, 1, 1) #label Model file
+
+        self.layout.addWidget(self.lineEdit_file2, 1, 1, 1, 2)
+        self.layout.addWidget(self.pushButton_15, 1, 3, 1, 1) #first browse non hidden 
+        self.layout.addWidget(self.pushButton_13, 1, 4, 1, 1) #load
+
+
+
+       
+       
+        hbox = QtWidgets.QHBoxLayout()
+
+        # Add the checkbox and label to the layout
+        hbox.addWidget(self.load_mods_checkbox, 0, QtCore.Qt.AlignLeft)
+        hbox.addWidget(self.label_23, 1, QtCore.Qt.AlignLeft)
+        # Set the horizontal stretch factor of the checkbox to 0 and the label to 1
+        hbox.setStretch(0, 0)
+        hbox.setStretch(1, 1)
+        self.layout.addLayout(hbox, 2, 0, 1, 2)
+
+
+
+        self.layout.addWidget(self.lineEdit_folder2, 2, 2, 1, 2)
+        self.layout.addWidget(self.pushButton_14, 2, 4, 1, 1)
 
         
+        
+        self.layout.addWidget(self.modellist, 3, 0, 10, 3)
+        self.layout.addWidget(self.pushButton_16, 3, 3, 2, 2) #define function
+        self.layout.addWidget(self.sim_param, 5, 2, 1, 1)
+        self.layout.addWidget(self.setter, 14, 0, 1, 1)
+        self.layout.addWidget(self.remover, 14, 1, 1, 1)
+
+        self.modeltab.setLayout(self.layout)
+
+        self.tabwidget.addTab(self.modeltab, "Model Tab")
+        
+        for widget in self.modeltab.findChildren(QtWidgets.QPushButton):
+            widget.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+
+
+
 
         #sim tab 3
         self.tabwidget.addTab(self.modeltab, "")
@@ -381,7 +475,93 @@ class Ui_Neuroptimus(object):
         self.label_55.setFont(font)
         self.label_55.setObjectName("label_55")
         
+       
 
+
+        # Create a new QGridLayout layout
+        grid = QtWidgets.QGridLayout(self.simtab)
+
+        # Create a group box for the stimulus protocol widgets
+        stim_group = QtWidgets.QGroupBox("Stimulus Mode")
+        stim_layout = QtWidgets.QVBoxLayout()
+        stim_layout.addWidget(self.label_55) #stim protocol
+        stim_layout.addWidget(self.stimprot)
+        stim_layout.addWidget(self.label_49) #stim type
+        stim_layout.addWidget(self.stimulus_type) 
+        stim_layout.addWidget(self.base_dir_controll9) #amplitude(s) push button
+        stim_group.setLayout(stim_layout)
+
+        # Add the stimulus protocol group box to the grid layout
+        grid.addWidget(stim_group, 0, 0, 5, 1)
+
+       
+        # Create a group box for the delay and duration widgets
+        time_group = QtWidgets.QGroupBox("Stimulation Time Settings")
+        time_layout = QtWidgets.QVBoxLayout()
+        time_layout.addWidget(self.label_44)
+        time_layout.addWidget(self.lineEdit_delay)
+        time_layout.addWidget(self.label_46)
+        time_layout.addWidget(self.lineEdit_duration)
+        time_group.setLayout(time_layout)
+
+        # Add the time group box to the grid layout
+        grid.addWidget(time_group, 5, 0, 4, 1)
+
+        # Create a group box for the section and position widgets
+        pos_group = QtWidgets.QGroupBox("Stimulus Position Configuration")
+        pos_layout = QtWidgets.QVBoxLayout()
+        pos_layout.addWidget(self.label_45)
+        pos_layout.addWidget(self.section_stim)
+        pos_layout.addWidget(self.label_71)
+        pos_layout.addWidget(self.lineEdit_posins)
+        pos_group.setLayout(pos_layout)
+
+        # Add the position group box to the grid layout
+        grid.addWidget(pos_group, 9, 0, 4, 1)
+
+        # Create a group box for the recording widgets
+        rec_group = QtWidgets.QGroupBox("Recording Settings")
+        rec_layout = QtWidgets.QVBoxLayout()
+        rec_layout.addWidget(self.label_52)
+        rec_layout.addWidget(self.param_to_record)
+        rec_layout.addWidget(self.label_48)
+        rec_layout.addWidget(self.section_rec)
+        rec_layout.addWidget(self.label_51)
+        rec_layout.addWidget(self.lineEdit_pos)
+        rec_group.setLayout(rec_layout)
+
+        # Add the recording group box to the grid layout
+        grid.addWidget(rec_group, 0, 1, 6, 1)
+
+        # Create a group box for the initv, tstop, and time step widgets
+        sim_group = QtWidgets.QGroupBox("Simulation Settings")
+        sim_layout = QtWidgets.QVBoxLayout()
+        sim_layout.addWidget(self.label_66)
+        sim_layout.addWidget(self.lineEdit_initv)
+        sim_layout.addWidget(self.label_67)
+        sim_layout.addWidget(self.lineEdit_tstop)
+        sim_layout.addWidget(self.label_68)
+        sim_layout.addWidget(self.lineEdit_dt)
+        sim_group.setLayout(sim_layout)
+
+        # Add the simulation group box to the grid layout
+        grid.addWidget(sim_group, 0, 2, 6, 1)
+
+       
+
+        for widget in self.simtab.findChildren(QtWidgets.QPushButton):
+            widget.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+
+        #setting groupbox titles only to bold centered
+        for widget in self.simtab.findChildren(QtWidgets.QGroupBox):
+            widget.setAlignment(QtCore.Qt.AlignCenter)
+            widget.setStyleSheet("QGroupBox {font-weight: bold;}")
+            
+
+
+        # Set the layout of the widget to the new QGridLayout
+        self.simtab.setLayout(grid)
+            
         #fit tab 4
         self.tabwidget.addTab(self.simtab, "")
         self.fittab = QtWidgets.QWidget()
@@ -395,7 +575,7 @@ class Ui_Neuroptimus(object):
         self.label_56.setFont(font)
         self.label_56.setObjectName("label_56")
         self.fitlist = QtWidgets.QTableWidget(self.fittab)
-        self.fitlist.setGeometry(QtCore.QRect(10, 80, 301, 401))
+        # self.fitlist.setGeometry(QtCore.QRect(10, 80, 301, 401))
         self.fitlist.setObjectName("fitlist")
         self.spike_tresh = QtWidgets.QLineEdit(self.fittab)
         self.spike_tresh.setGeometry(QtCore.QRect(370,110, 113, 22))
@@ -428,6 +608,50 @@ class Ui_Neuroptimus(object):
         self.fittab_help.setGeometry(350, 260, 30, 30)"""
         self.pushButton_normalize.setToolTip("<p>Rescale the active fitness weights sum to 1</p>")
         self.fitlist.setToolTip("<p>Fitness functions with 0 weights considered inactive</p>")
+
+
+        # Create a new QGridLayout
+        grid = QtWidgets.QGridLayout(self.fittab)
+
+        grid.addWidget(self.pushButton_normalize, 0, 1)
+        grid.addWidget(self.fitlist, 1, 0, 10, 2)
+        #make the table widget stretch to fill the available space
+        grid.setColumnStretch(0, 1)
+        grid.setRowStretch(0, 1)
+
+
+
+        # Create a new QGroupBox for the spike detection parameters
+        spike_group_box = QtWidgets.QGroupBox("Spike Detection Parameters")
+        #make the group panel flat
+       
+
+        #set the font to be bold for the group box title
+        spike_group_box.setStyleSheet("QGroupBox { font-weight: bold; }")
+
+
+        # Create a new QGridLayout for the spike detection group box
+        spike_group_layout = QtWidgets.QVBoxLayout(spike_group_box)
+
+        # Add the widgets to the spike detection group box
+        spike_group_layout.addWidget(self.label_69)
+        spike_group_layout.addWidget(self.spike_tresh)
+        spike_group_layout.addWidget(self.label_70)
+        spike_group_layout.addWidget(self.spike_window)
+
+
+       
+        grid.addWidget(spike_group_box, 1, 5, 4, 2)
+
+
+        # Set the layout of the spike detection group box
+        spike_group_box.setLayout(spike_group_layout)
+
+
+        self.fittab.setLayout(grid)
+
+
+
 
         #run tab 5
         self.tabwidget.addTab(self.fittab, "")
@@ -495,6 +719,59 @@ class Ui_Neuroptimus(object):
         self.results_tab = QtWidgets.QWidget()
         self.results_tab.setObjectName("results_tab")
 
+        grid = QtWidgets.QGridLayout(self.runtab)
+
+        grid.addWidget(self.label_59, 0, 0, 1, 2) #Algorithm label
+
+        # group the push buttons in a tight horizontal group
+        button_layout = QtWidgets.QHBoxLayout()
+        button_layout.addWidget(self.pushButton_Recom)
+        button_layout.addWidget(self.pushButton_Inspyred)
+        button_layout.addWidget(self.pushButton_Pygmo)
+        button_layout.addWidget(self.pushButton_Bluepyopt)
+        button_layout.addWidget(self.pushButton_Scipy)
+
+        #setting all the labels in the run tab to bold
+        for widget in self.runtab.findChildren(QtWidgets.QLabel):
+            font = QtGui.QFont()
+            font.setFamily("Ubuntu")
+            font.setPointSize(10)
+            font.setBold(True)
+            widget.setFont(font)
+
+
+
+        
+
+        #making the buttons layout very tight
+        button_layout.setSpacing(0)
+        button_layout.setContentsMargins(0, 0, 0, 0)
+    
+        grid.addLayout(button_layout, 1, 0, 1, 2)
+        
+        #make the table widget stretch to fill the available space
+        self.algolist.horizontalHeader().setStretchLastSection(True)
+
+        grid.addWidget(self.algolist, 2, 0, 1, 4)
+
+        grid.addWidget(self.label_60,0,2,1,1) #Parameters label
+        grid.addWidget(self.algorithm_parameter_list,1,2,2,4)
+        self.algorithm_parameter_list.horizontalHeader().setStretchLastSection(True)
+
+        grid.addWidget(self.pushButton_32, 3, 0, 1, 1) #Boundaries
+        grid.addWidget(self.pushButton_33, 3, 2, 1, 1) #Evaluate
+        grid.addWidget(self.pushButton_30, 3, 3, 1, 1) #Run
+
+        self.pushButton_32.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.pushButton_33.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.pushButton_30.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+
+
+        
+
+        self.runtab.setLayout(grid)
+
+
         #plot tab 6
         font = QtGui.QFont()
         font.setFamily("Ubuntu")
@@ -502,27 +779,55 @@ class Ui_Neuroptimus(object):
         font.setBold(False)
         font.setWeight(75)
         self.label_72 = QtWidgets.QLabel(self.results_tab)
-        self.label_72.setGeometry(QtCore.QRect(10, 50, 200, 16))
+        self.label_72.setGeometry(QtCore.QRect(10, 10, 200, 16))
+
         self.label_72.setFont(font)
         self.label_72.setObjectName("label_72")
         self.tabwidget.addTab(self.results_tab, "")
-        self.stat_tab = QtWidgets.QWidget()
-        self.stat_tab.setObjectName("stat_tab")
         self.plot_widget = QtWidgets.QWidget(self.results_tab)
         self.plot_widget.setGeometry(QtCore.QRect(180, 10, 800, 600))
         self.plot_widget.setObjectName("plot_widget")
         self.pushButton_34 = QtWidgets.QPushButton(self.results_tab)
         self.pushButton_34.setGeometry(QtCore.QRect(30, 400, 121, 22))
         self.pushButton_34.setObjectName("pushButton_34")
+
+        
+
+
+        self.results_tab_grid = QtWidgets.QGridLayout(self.results_tab)
+
+        grid.addWidget(self.label_72, 0, 0, 1, 1)
+        self.label_72.sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.results_tab_grid.addWidget(self.pushButton_34, 2, 0, 1, 2)
+
+        self.results_tab_grid.addWidget(self.plot_widget, 0, 4, 4, 3)
+        # self.plot_widget.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+
+      
+        #making pushButton 34 not to stretch and be fixed
+        for widget in self.results_tab.findChildren(QtWidgets.QPushButton):
+            widget.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+
+
+       
+        self.results_tab.setLayout(self.results_tab_grid)
+
+       
+
+
+
+
         
         #stat tab 7
+        self.stat_tab = QtWidgets.QWidget()
+        self.stat_tab.setObjectName("stat_tab")
         self.tabwidget.addTab(self.stat_tab, "")
         self.pushButton_35 = QtWidgets.QPushButton(self.stat_tab)
         self.pushButton_35.setGeometry(QtCore.QRect(30, 400, 111, 22))
         self.pushButton_35.setObjectName("pushButton_34")
-        #self.pushButton_36 = QtWidgets.QPushButton(self.stat_tab)  grid_plot
-        #self.pushButton_36.setGeometry(QtCore.QRect(150, 400, 111, 22))
-        #self.pushButton_36.setObjectName("pushButton_34")
+        self.pushButton_36 = QtWidgets.QPushButton(self.stat_tab)  
+        self.pushButton_36.setGeometry(QtCore.QRect(150, 400, 111, 22))
+        self.pushButton_36.setObjectName("pushButton_34")
         self.pushButton_37 = QtWidgets.QPushButton(self.stat_tab)
         self.pushButton_37.setGeometry(QtCore.QRect(300, 400, 111, 22))
         self.pushButton_37.setObjectName("pushButton_34")
@@ -543,6 +848,30 @@ class Ui_Neuroptimus(object):
         self.fitstat.setFont(font)
         self.fitstat.setObjectName("label")
         self.fitstat.setText(QtCore.QCoreApplication.translate("Neuroptimus", 'Fitness statistics'))
+
+
+        #grid layout
+        self.statLayout = QtWidgets.QGridLayout(self.stat_tab)
+        # self.statLayout.addWidget(self.label_74, 0, 0, 1, 2)
+        # self.statLayout.addWidget(self.pushButton_35, 2, 0, 1, 2)
+        # self.statLayout.addWidget(self.fitstat, 0, 1, 1, 1)
+        # self.statLayout.addWidget(self.errorlist, 1, 1, 1, 2) 
+        # self.statLayout.addWidget(self.pushButton_37, 2, 1, 1, 1)
+        
+        #making pushButtons 37,35 not to stretch and be fixed
+        self.pushButton_37.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        self.pushButton_35.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        #making all coloumns of the errorlist table widget stretch to fill the available space
+        self.errorlist.horizontalHeader().setStretchLastSection(True)
+
+
+
+
+        self.stat_tab.setLayout(self.statLayout)
+
+
+
+
 
 
 
@@ -568,6 +897,10 @@ class Ui_Neuroptimus(object):
         QtCore.QMetaObject.connectSlotsByName(Neuroptimus)
         self.tabwidget.setCurrentIndex(0)
 
+
+
+
+
     def retranslateUi(self, Neuroptimus):
         """
         Set PyQT widgets behaviors and implements functions.
@@ -590,7 +923,7 @@ class Ui_Neuroptimus(object):
         self.pushButton_12.setText(_translate("Neuroptimus", "Load python file"))
         self.pushButton_12.clicked.connect(self.Loadpython)
         self.pushButton_12.hide()
-        self.pushButton_14.setText(_translate("Neuroptimus", "Browse..."))
+        self.pushButton_14.setText(_translate("Neuroptimus", "Browse...")) 
         self.pushButton_14.clicked.connect(self.openFolderNameDialog2)
         self.pushButton_15.setText(_translate("Neuroptimus", "Browse..."))
         self.pushButton_15.clicked.connect(self.openFileNameDialog2)
@@ -640,6 +973,7 @@ class Ui_Neuroptimus(object):
         self.type_selector.setItemText(1, _translate("Neuroptimus", "Current trace"))
         self.type_selector.setItemText(2, _translate("Neuroptimus", "Features"))
         self.type_selector.setItemText(3, _translate("Neuroptimus", "Other"))
+
         self.type_selector.currentTextChanged.connect(self.unitchange)
         self.input_file_controll.setText(_translate("Neuroptimus", "Browse..."))
         self.input_file_controll.clicked.connect(self.openFileNameDialog)
@@ -655,10 +989,24 @@ class Ui_Neuroptimus(object):
         self.tspike_t=None
         self.tother=None
         self.tfeatures=None
-        #self.vbox.setItemText(_translate("Neuroptimus", "Vbox"))
+    
+        #Input data plot
         self.figure = plt.figure(figsize=(4,2.5), dpi=80)
         self.canvas = FigureCanvas(self.figure)
         self.canvas.setParent(self.widget)
+        # self.canvas.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        
+        #add to horizontal layout
+        self.hbox = QtWidgets.QHBoxLayout(self.widget)
+        self.hbox.addWidget(self.canvas)
+        self.widget.setLayout(self.hbox)
+        
+
+        
+        
+        # plot  = MyWidget(parent=self.widget)
+        # self.figure = plot.figure
+        # self.canvas = plot.canvas
         #enable this later
         self.loaded_input_types=[self.tvoltage ,
                                  self.tcurrent ,
@@ -722,7 +1070,7 @@ class Ui_Neuroptimus(object):
         #runtab 5
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.fittab), _translate("Neuroptimus", "Fitness"))
         self.pushButton_30.setText(_translate("Neuroptimus", "Run"))
-        self.pushButton_30.clicked.connect(self.runsim)
+        self.pushButton_30.clicked.connect(self.startFittingThread)
         # self.pushButton_31.setText(_translate("Neuroptimus", "Starting points"))
         # self.pushButton_31.clicked.connect(self.startingpoints)
         # self.pushButton_31.setEnabled(False)
@@ -839,9 +1187,13 @@ class Ui_Neuroptimus(object):
 
         self.tabwidget.setTabText(self.tabwidget.indexOf(self.results_tab), _translate("Neuroptimus", "Results"))
         self.label_72.setText(_translate("Neuroptimus", "Final Result"))
-        self.figure2, self.results_tab_axes = plt.subplots(figsize=(8,6), dpi=80)
+        self.figure2, self.results_tab_axes = plt.subplots( dpi=80)
         self.canvas2 = FigureCanvas(self.figure2)
         self.canvas2.setParent(self.plot_widget)
+        hbox2 = QtWidgets.QHBoxLayout(self.plot_widget)
+        hbox2.addWidget(self.canvas2)
+        self.plot_widget.setLayout(hbox2)
+       
         self.pushButton_34.setText(_translate("Neuroptimus", "Save Parameters"))
         self.pushButton_34.clicked.connect(self.SaveParam)
 
@@ -879,10 +1231,79 @@ class Ui_Neuroptimus(object):
             label.setObjectName("label")
             self.result_labels.append(label)
             scroll_area = QtWidgets.QScrollArea(curr_tab)
-            scroll_area.setGeometry(QtCore.QRect(10, 100, 170, 256))
+            # scroll_area.setGeometry(QtCore.QRect(10, 100, 170, 256))
+            scroll_area.setGeometry(QtCore.QRect(10, 100, 300+50, 500))
+
             scroll_area.setWidget(label)
             scroll_area.setWidgetResizable(True)
 
+
+
+            
+            if curr_tab is self.results_tab:
+                scroll_area.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+                self.canvas2.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+                self.results_tab_grid.addWidget(self.label_72, 0, 0, 1, 2)          
+                self.results_tab_grid.addWidget(scroll_area, 1, 0, 1, 2)
+                self.results_tab_grid.addWidget(self.plot_widget, 0, 3, 2, 3)
+
+            elif curr_tab is self.stat_tab:
+                self.statLayout.addWidget(self.label_74, 0, 0, 1, 2)
+                self.statLayout.addWidget(scroll_area,1,0,2,2)
+                self.scroll_area2_stat = QtWidgets.QScrollArea(self.stat_tab)
+                self.stats_label = QtWidgets.QLabel(self.stat_tab)
+                self.stats_label.setGeometry(QtCore.QRect(300, 80, 250, 146))
+                font = QtGui.QFont()
+                font.setFamily("Ubuntu")
+                font.setPointSize(10)
+                font.setBold(False)
+                font.setWeight(50)
+                self.stats_label.setFont(font)
+                self.stats_label.setObjectName("label")
+                # scroll_area_2.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+                self.scroll_area2_stat.setGeometry(QtCore.QRect(300,80, 350, 100))
+                self.scroll_area2_stat.setWidgetResizable(True)
+                self.statLayout.addWidget(self.pushButton_35, 3, 0, 1, 2)
+
+
+                self.statLayout.addWidget(self.fitstat, 0, 4, 1, 4) #label
+                self.statLayout.addWidget(self.scroll_area2_stat, 1, 4, 1, 2)
+                #making a bold label
+                font = QtGui.QFont()
+                font.setFamily("Ubuntu")
+                font.setPointSize(10)
+                font.setBold(True)
+                font.setWeight(75)
+                self.fitstat.setFont(font)
+                self.statLayout.addWidget(self.errorlist, 2, 4, 1, 4) 
+                self.statLayout.addWidget(self.pushButton_37, 3, 4, 1, 1)
+                self.errorlist.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+                self.errorlist.horizontalHeader().setStretchLastSection(True)
+                # self.statLayout.setColumnStretch(0, 1)
+                # self.statLayout.setColumnStretch(1, 2)
+
+
+
+
+
+    # def startFittingThread(self):
+    
+
+    #     # Create a new thread for optimization
+    #     optimization_thread = threading.Thread(target=self.runsim)
+    #     optimization_thread.start()
+
+
+    def startFittingThread(self):
+        # Create a new thread for optimization
+        self.fitting_thread = FittingThread(self)
+        # self.fitting_thread.finished.connect(self.on_fitting_finished)
+        # self.fitting_thread.error.connect(self.on_fitting_error)
+
+        # Start the thread
+        self.fitting_thread.start()    
+
+        
     def help_popup_fit(self):
         msg = QtWidgets.QMessageBox()
         msg.setIcon(QtWidgets.QMessageBox.Question)
@@ -1623,10 +2044,10 @@ class Ui_Neuroptimus(object):
                     item = self.algorithm_parameter_list.item(row,1).text()
                     if item:
                         try:
-                            if item.isdigit():
-                                value=int(self.algorithm_parameter_list.item(row,1).text())
-                            else:
+                            if item.find(".")>0:
                                 value=float(self.algorithm_parameter_list.item(row,1).text())
+                            else:
+                                value=int(self.algorithm_parameter_list.item(row,1).text())
                         except ValueError as e:
                             value=self.algorithm_parameter_list.item(row,1).text()
                     else:
@@ -1647,11 +2068,11 @@ class Ui_Neuroptimus(object):
                 popup(errpop[0])
             self.tabwidget.setCurrentIndex(int(min(err)))
         else:
-            #try:
-            self.seed = None
-            self.core.ThirdStep(self.kwargs)
-            """except:
-                    popup("Run step error")"""
+            try:
+                self.seed = None
+                self.core.ThirdStep(self.kwargs)
+            except:
+                    popup("Run step error")
             if self.core.option_handler.output_level=="1":
                 self.core.Print()
             
@@ -1755,20 +2176,8 @@ class Ui_Neuroptimus(object):
         except AttributeError:
             stats={'best' : "unkown",'worst' : "unkown",'mean' : "unkown",'median' : "unkown", 'std' : "unkown"}
         string = "Best: " + str(stats['best']) + "\nWorst: " + str(stats['worst']) + "\nMean: " + str(stats['mean']) + "\nMedian: " + str(stats['median']) + "\nStd:" + str(stats['std'])
-        label = QtWidgets.QLabel(self.stat_tab)
-        label.setGeometry(QtCore.QRect(300, 80, 250, 146))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu")
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        label.setFont(font)
-        label.setObjectName("label")
-        label.setText(QtCore.QCoreApplication.translate("Neuroptimus", string))
-        scroll_area = QtWidgets.QScrollArea(self.stat_tab)
-        scroll_area.setGeometry(QtCore.QRect(300,80, 350, 100))
-        scroll_area.setWidget(label)
-        scroll_area.setWidgetResizable(True)
+        self.stats_label.setText(QtCore.QCoreApplication.translate("Neuroptimus", string))
+        self.scroll_area2_stat.setWidget(self.stats_label)
         self.errorlist.setRowCount(self.recursive_len(self.core.error_comps))
 
         idx=0
@@ -1894,8 +2303,26 @@ class SecondWindow(QtWidgets.QMainWindow):
         self.pushButton_47.clicked.connect(self.close)
         self.option_handler=parent.core.option_handler 
         self.modellist=parent.modellist
+
+        # Create the central widget
+        self.central = QtWidgets.QWidget(self)
+        self.setCentralWidget(self.central)
             
+        # Create a new QGridLayout
+        grid = QtWidgets.QGridLayout(self.central)
         
+        # Add the widgets to the grid layout
+        grid.addWidget(self.plaintext, 0, 0, 1, 2)
+        grid.addWidget(self.pushButton_45, 1, 0)
+        grid.addWidget(self.pushButton_46, 1, 1)
+        grid.addWidget(self.pushButton_47, 2, 1)
+
+        # Set the layout of the central widget to the grid layout
+        self.central.setLayout(grid)
+
+        # Set the properties of the main window
+        self.setWindowTitle("User Defined Function")
+        self.setGeometry(100, 100, 500, 500)
 
 
     def loaduserfun(self):    
@@ -1953,6 +2380,9 @@ class StimuliWindow(QtWidgets.QMainWindow):
         super(StimuliWindow, self).__init__()
         _translate = QtCore.QCoreApplication.translate
         self.parent=parent
+        # Create the central widget
+        self.central = QtWidgets.QWidget(self)
+        self.setCentralWidget(self.central)
         self.amplit_edit = QtWidgets.QLineEdit(self)
         self.amplit_edit.setGeometry(QtCore.QRect(140, 10, 61, 22))
         self.amplit_edit.setObjectName("amplit_edit")
@@ -1989,6 +2419,27 @@ class StimuliWindow(QtWidgets.QMainWindow):
         self.stim_table.setHorizontalHeaderLabels(["Amplitude ("+unit+")"])
         self.stim_table.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.stim_table.horizontalHeader().setStretchLastSection(True)
+
+
+
+        # Create a new QGridLayout
+        grid = QtWidgets.QGridLayout(self.central)
+
+        # Add the widgets to the grid layout
+        grid.addWidget(self.label_amplit, 0, 0)
+        grid.addWidget(self.amplit_edit, 0, 1)
+        grid.addWidget(self.pushButton_create, 0, 2)
+        grid.addWidget(self.stim_table, 1, 0, 1, 3)
+        grid.addWidget(self.pushButton_accept, 2, 2)
+
+        # Set the layout of the central widget to the grid layout
+        self.centralWidget().setLayout(grid)
+
+        # Set the properties of the main window
+        self.setWindowTitle("Stimuli Window")
+        self.setGeometry(100, 100, 400, 500)
+
+
         if self.parent.container:
             self.amplit_edit.setText(str(len(self.parent.container)))
             self.stim_table.setRowCount(len(self.parent.container))

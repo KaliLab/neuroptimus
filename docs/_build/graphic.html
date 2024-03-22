@@ -45,7 +45,6 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Neuroptimus tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="neuroptimus.html">neuroptimus module</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">neuroptimus</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Core.html">Core module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modelHandler.html">modelHandler module</a></li>
@@ -66,6 +65,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#graphic.EvaluateSingle"><code class="docutils literal notranslate"><span class="pre">EvaluateSingle</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#graphic.EvaluateSingle.OnEvaluate"><code class="docutils literal notranslate"><span class="pre">EvaluateSingle.OnEvaluate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#graphic.EvaluateSingle.OnLoad"><code class="docutils literal notranslate"><span class="pre">EvaluateSingle.OnLoad()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#graphic.FittingThread"><code class="docutils literal notranslate"><span class="pre">FittingThread</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#graphic.FittingThread.error"><code class="docutils literal notranslate"><span class="pre">FittingThread.error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#graphic.FittingThread.finished"><code class="docutils literal notranslate"><span class="pre">FittingThread.finished</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#graphic.FittingThread.run"><code class="docutils literal notranslate"><span class="pre">FittingThread.run()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#graphic.SecondWindow"><code class="docutils literal notranslate"><span class="pre">SecondWindow</span></code></a><ul>
@@ -118,6 +123,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#graphic.Ui_Neuroptimus.runsim"><code class="docutils literal notranslate"><span class="pre">Ui_Neuroptimus.runsim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#graphic.Ui_Neuroptimus.setupUi"><code class="docutils literal notranslate"><span class="pre">Ui_Neuroptimus.setupUi()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#graphic.Ui_Neuroptimus.sim_plat"><code class="docutils literal notranslate"><span class="pre">Ui_Neuroptimus.sim_plat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#graphic.Ui_Neuroptimus.startFittingThread"><code class="docutils literal notranslate"><span class="pre">Ui_Neuroptimus.startFittingThread()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#graphic.Ui_Neuroptimus.startingpoints"><code class="docutils literal notranslate"><span class="pre">Ui_Neuroptimus.startingpoints()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#graphic.Ui_Neuroptimus.stat_tab_fun"><code class="docutils literal notranslate"><span class="pre">Ui_Neuroptimus.stat_tab_fun()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#graphic.Ui_Neuroptimus.time_calc"><code class="docutils literal notranslate"><span class="pre">Ui_Neuroptimus.time_calc()</span></code></a></li>
@@ -209,6 +215,27 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="graphic.FittingThread">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graphic.</span></span><span class="sig-name descname"><span class="pre">FittingThread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphic.FittingThread" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graphic.FittingThread.error">
+<span class="sig-name descname"><span class="pre">error</span></span><a class="headerlink" href="#graphic.FittingThread.error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graphic.FittingThread.finished">
+<span class="sig-name descname"><span class="pre">finished</span></span><a class="headerlink" href="#graphic.FittingThread.finished" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graphic.FittingThread.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphic.FittingThread.run" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="graphic.SecondWindow">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graphic.</span></span><span class="sig-name descname"><span class="pre">SecondWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphic.SecondWindow" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QMainWindow</span></code></p>
@@ -264,7 +291,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="graphic.Ui_Neuroptimus">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graphic.</span></span><span class="sig-name descname"><span class="pre">Ui_Neuroptimus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphic.Ui_Neuroptimus" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QMainWindow</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="graphic.Ui_Neuroptimus.Fit_normalize">
 <span class="sig-name descname"><span class="pre">Fit_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graphic.Ui_Neuroptimus.Fit_normalize" title="Permalink to this definition"></a></dt>
@@ -472,6 +499,11 @@ Switch to the tab, where the error happened and popup the erro.</p>
 <span class="sig-name descname"><span class="pre">sim_plat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graphic.Ui_Neuroptimus.sim_plat" title="Permalink to this definition"></a></dt>
 <dd><p>Called when simulation platform changed, locks unnecessary widgets and swap Label of Load button.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graphic.Ui_Neuroptimus.startFittingThread">
+<span class="sig-name descname"><span class="pre">startFittingThread</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graphic.Ui_Neuroptimus.startFittingThread" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graphic.Ui_Neuroptimus.startingpoints">

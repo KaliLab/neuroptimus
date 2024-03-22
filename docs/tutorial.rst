@@ -24,7 +24,6 @@ D	Type of input (voltage, current trace or features).
 E	Path to base directory (resulting files will be
  	stored here).
 F	Select the base location.
-G	Tree!
 G	Number of traces in file (trace set).
 H	Units of the data.
 I	Length of trace(s). (in case of multiple traces, they
@@ -32,9 +31,11 @@ I	Length of trace(s). (in case of multiple traces, they
 J	Sampling frequency (in case of multiple traces,
  	it must be the same for all).
 K	Loads the target data from the given file.
-L	Displays the loaded trace (if given file contains 
+L	Input tree
+M	Displays the loaded trace (if given file contains 
  	more, the trace will be concatenated for
  	displaying).
+
 =       ========================================= 
 
 
@@ -140,7 +141,8 @@ Weights can be normalized so that they sum to 1, but this is optional. The user 
 =     ==================================
 A     List of available fitness functions and weights assigned to the selected functions.
 B     Normalizes the weights (optional).
-C     Parameters passed to the fitness functions.
+C     Spike detection treshold passed to the fitness functions.
+D     Spike window time passed to the fitness functions.
 =     ==================================
 
 Run tab
