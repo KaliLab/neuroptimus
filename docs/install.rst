@@ -63,6 +63,7 @@ Test Platforms
 
 The package was tested on the following systems:
 
-    1. Ubuntu 14.04.4 LTS 
+    1. Ubuntu 22.04.1 LTS
+    2. Ubuntu 20.04.6 LTS 
     2. Fedora release 32 (Thirty Two) (neurofedora)
 

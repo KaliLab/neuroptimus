@@ -6,11 +6,14 @@
 Welcome to Neuroptimus's documentation!
 =======================================
 
+
+Neuroptimus is an open-source framework for solving parameter optimization problems, with many additional features (including a GUI) to support typical use cases in neuroscience. To install Neuroptimus, please visit the GitHub repository https://github.com/KaliLab/neuroptimus . The neuroptimus/new_test_files folder in the repository contains several examples of using Neuroptimus, with detailed PDF guides to setting up and running these use cases in the Neuroptimus GUI.
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   home
    install
    running
    tutorial
