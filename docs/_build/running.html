@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>neuroptimus module &mdash; Neuroptimus 0.1 documentation</title>
+  <title>Run Neuroptimus &mdash; Neuroptimus 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,9 @@
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,10 +43,10 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="home.html">Welcome to the documentation of Neuroptimus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="running.html">Run Neuroptimus</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Run Neuroptimus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 </ul>
 
@@ -62,9 +64,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">neuroptimus module</li>
+      <li class="breadcrumb-item active">Run Neuroptimus</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/neuroptimus.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/running.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -72,30 +74,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-neuroptimus">
-<span id="neuroptimus-module"></span><h1>neuroptimus module<a class="headerlink" href="#module-neuroptimus" title="Permalink to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="neuroptimus.main">
-<span class="sig-prename descclassname"><span class="pre">neuroptimus.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuroptimus.main" title="Permalink to this definition"></a></dt>
-<dd><p>The main function, which starts to software according to the given command line arguments.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>parameters</strong> – the command line parameters:</p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>-h help</p></li>
-<li><p>-c command line</p></li>
-<li><p>-g graphic interface</p></li>
-</ul>
-</dd></dl>
-
+  <section id="run-neuroptimus">
+<h1>Run Neuroptimus<a class="headerlink" href="#run-neuroptimus" title="Permalink to this heading"></a></h1>
+<p>You can run Neuroptimus (with a GUI) directly from its installation folder with:</p>
+<blockquote>
+<div><p>python neuroptimus.py -g</p>
+</div></blockquote>
+<p>Or for the command line version (you must specify a configuration file as well):</p>
+<blockquote>
+<div><p>python neuroptimus.py -c example.xml</p>
+</div></blockquote>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial.html" class="btn btn-neutral float-right" title="Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

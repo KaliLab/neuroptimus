@@ -10,9 +10,10 @@ Welcome to Neuroptimus's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   home
    install
+   running
    tutorial
-   modules
 
 Indices and tables
 ==================

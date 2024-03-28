@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Neuroptimus tutorial &mdash; Neuroptimus 0.1 documentation</title>
+  <title>Tutorial &mdash; Neuroptimus 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="neuroptimus" href="modules.html" />
-    <link rel="prev" title="Installation" href="install.html" /> 
+    <link rel="prev" title="Run Neuroptimus" href="running.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,8 +43,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="home.html">Welcome to the documentation of Neuroptimus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Neuroptimus tutorial</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Run Neuroptimus</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#target-data-tab">Target data tab</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#model-tab">Model tab</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#settings-tab">Settings tab</a></li>
@@ -56,7 +57,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#other-windows">Other windows</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">neuroptimus</a></li>
 </ul>
 
         </div>
@@ -73,7 +73,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Neuroptimus tutorial</li>
+      <li class="breadcrumb-item active">Tutorial</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/tutorial.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,8 +83,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="neuroptimus-tutorial">
-<h1>Neuroptimus tutorial<a class="headerlink" href="#neuroptimus-tutorial" title="Permalink to this heading"></a></h1>
+  <section id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h1>
 <section id="target-data-tab">
 <h2>Target data tab<a class="headerlink" href="#target-data-tab" title="Permalink to this heading"></a></h2>
 <p>After the program started, the first tab will appear where the user can select the file containing the target data. The user must specify the path to this file, and the working directory (base directory)
@@ -119,26 +119,26 @@ stored here).</p></td>
 <td><p>Select the base location.</p></td>
 </tr>
 <tr class="row-odd"><td><p>G</p></td>
-<td><p>Tree!</p></td>
-</tr>
-<tr class="row-even"><td><p>G</p></td>
 <td><p>Number of traces in file (trace set).</p></td>
 </tr>
-<tr class="row-odd"><td><p>H</p></td>
+<tr class="row-even"><td><p>H</p></td>
 <td><p>Units of the data.</p></td>
 </tr>
-<tr class="row-even"><td><p>I</p></td>
+<tr class="row-odd"><td><p>I</p></td>
 <td><p>Length of trace(s). (in case of multiple traces, they
 must have the same length)</p></td>
 </tr>
-<tr class="row-odd"><td><p>J</p></td>
+<tr class="row-even"><td><p>J</p></td>
 <td><p>Sampling frequency (in case of multiple traces,
 it must be the same for all).</p></td>
 </tr>
-<tr class="row-even"><td><p>K</p></td>
+<tr class="row-odd"><td><p>K</p></td>
 <td><p>Loads the target data from the given file.</p></td>
 </tr>
-<tr class="row-odd"><td><p>L</p></td>
+<tr class="row-even"><td><p>L</p></td>
+<td><p>Input tree</p></td>
+</tr>
+<tr class="row-odd"><td><p>M</p></td>
 <td><p>Displays the loaded trace (if given file contains
 more, the trace will be concatenated for
 displaying).</p></td>
@@ -299,7 +299,10 @@ Weights can be normalized so that they sum to 1, but this is optional. The user 
 <td><p>Normalizes the weights (optional).</p></td>
 </tr>
 <tr class="row-odd"><td><p>C</p></td>
-<td><p>Parameters passed to the fitness functions.</p></td>
+<td><p>Spike detection treshold passed to the fitness functions.</p></td>
+</tr>
+<tr class="row-even"><td><p>D</p></td>
+<td><p>Spike window time passed to the fitness functions.</p></td>
 </tr>
 </tbody>
 </table>
@@ -447,8 +450,7 @@ parameters.</p></td>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="modules.html" class="btn btn-neutral float-right" title="neuroptimus" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="running.html" class="btn btn-neutral float-left" title="Run Neuroptimus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

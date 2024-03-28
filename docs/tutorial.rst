@@ -1,4 +1,4 @@
-Neuroptimus tutorial
+Tutorial
 ==================
 
 Target data tab
