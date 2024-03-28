@@ -8,7 +8,6 @@
 
 import os
 import sys
-import sphinx_rtd_theme
 
 sys.path.insert(0, os.path.abspath("../neuroptimus"))
 
@@ -25,7 +24,6 @@ extensions = [
    'sphinx.ext.doctest',
    'sphinx.ext.autodoc',
    'sphinx.ext.autosummary',
-   'sphinx_rtd_theme',
 ]
 
 templates_path = ['_templates']
