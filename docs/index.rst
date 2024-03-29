@@ -3,11 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Neuroptimus's documentation!
-=======================================
+Welcome the documentation of Neuroptimus!
+=========================================
 
 
-Neuroptimus is an open-source framework for solving parameter optimization problems, with many additional features (including a GUI) to support typical use cases in neuroscience. To install Neuroptimus, please visit the GitHub repository https://github.com/KaliLab/neuroptimus . The neuroptimus/new_test_files folder in the repository contains several examples of using Neuroptimus, with detailed PDF guides to setting up and running these use cases in the Neuroptimus GUI.
+Neuroptimus is an open-source framework for solving parameter optimization problems, with many additional features (including a GUI) to support typical use cases in neuroscience.
+To install Neuroptimus, please visit the GitHub repository https://github.com/KaliLab/neuroptimus . 
+The neuroptimus/new_test_files folder in the repository contains several examples of using Neuroptimus, with detailed PDF guides to setting up and running these use cases in the Neuroptimus GUI.
 
 
 .. toctree::
@@ -17,6 +19,7 @@ Neuroptimus is an open-source framework for solving parameter optimization probl
    install
    running
    tutorial
+   devs
 
 Indices and tables
 ==================

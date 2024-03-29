@@ -1,10 +1,12 @@
-#Neuroptimus
-Neuroptimus is a graphical tool for fitting the parameters of neuronal models
+Neuroptimus is an open-source framework for solving parameter optimization problems, with many additional features (including a GUI) to support typical use cases in neuroscience.
+To install Neuroptimus, please visit the GitHub repository https://github.com/KaliLab/neuroptimus . 
+The neuroptimus/new_test_files folder in the repository contains several examples of using Neuroptimus, with detailed PDF guides to setting up and running these use cases in the Neuroptimus GUI.
+
 
 Installation
 ============
 
-Get a read only copy of Neuroptimus
+Get a copy of Neuroptimus
 ----------------------------------
 
 Install `git` and type:
@@ -27,7 +29,7 @@ The following libraries are recommended:
   - neuron
   - scipy 
   - PyQt5
-  - inspyred (install from github, see below)
+  - inspyred 
   - pyelectro
   - Pygmo
   - bluepyopt
@@ -47,25 +49,6 @@ You can get individual package with `pip`:
     
     pip install neuron
 
-
-For the latest inspyred version:
-
-    pip install git+https://github.com/aarongarrett/inspyred
-    
-
-
-
-Run Neuroptimus
--------------------
-
-You can run Neuroptimus (with a GUI) directly from its installation folder with:
-
-    python neuroptimus.py -g
-    
-Or for the command line version (you must specify a configuration file as well):
-
-    python neuroptimus.py -c example.xml
-    
     
 Build documentation
 -------------------
@@ -84,28 +67,45 @@ Test Platforms
 
 The package was tested on the following systems:
 
-    1. Ubuntu 14.04.4 LTS 
-    2. Fedora release 32 (Thirty Two) (neurofedora)
-
+    1. Ubuntu 22.04.1 LTS
+    2. Ubuntu 20.04.6 LTS 
+    3. Fedora release 32 (Thirty Two) (neurofedora)
 
     
+Running Neuroptimus
+===================
+
+
+You can run Neuroptimus (with a GUI) directly from its installation folder with:
+
+    python neuroptimus.py -g
+    
+Or for the command line version (you must specify a configuration file as well):
+
+    python neuroptimus.py -c example.xml
+    
+        
 Developers
-----------
+==========
 
-Project Leader:
+Project leader:
 
-    - Szabolcs Káli:
-        kali@koki.hu
+        Szabolcs Káli
 
-Lead Developer:
+            kali.szabolcs@koki.hun-ren.hu
 
-    - Máté Mohácsi
-	mohacsi.mate@koki.mta.hu
-	
-    - Sára Sáray
-	saray.sara@koki.mta.hu
-	
-    - Márk Török Patrik
-	torok.mark.patrik@gmail.com
+Lead developer:
+
+        Máté Mohácsi
+
+            mohacsi.mate@koki.hun-ren.hu
+
+Past developers:
+
+        Péter Friedrich
+
+        Sára Sáray
+
+        Márk Patrik Török
 
 
