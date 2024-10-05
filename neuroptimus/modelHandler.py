@@ -102,10 +102,16 @@ class modelHandlerNeuron():
         self.model_dir=('/').join(self.model.rsplit('/')[0:-1])
         if self.special:
             neuron.load_mechanisms(self.special)
-
         self.hoc_obj=first_hoc_cls.__new__(first_hoc_cls)
         self.hoc_obj.__dict__.update(first_hoc_dict)
-        self.hoc_obj.load_file(1,str(self.model))
+        if self.model.lower().endswith(('.py')):
+            sys.path.append(self.model_dir)
+            spec = importlib.util.spec_from_file_location(os.path.basename(model_path), model_path)
+            modelfile = importlib.util.module_from_spec(spec)
+            sys.modules["model.file"] = modelfile
+            spec.loader.exec_module(modelfile)
+        else:
+            self.hoc_obj.load_file(1,str(self.model))
         self.hoc_obj.load_file("stdrun.hoc")
         self.vec=self.hoc_obj.Vector()
         self.stimulus=None
@@ -113,7 +119,7 @@ class modelHandlerNeuron():
         self.spike_times=None
         self.sections={}
         for n in self.hoc_obj.allsec():
-            self.sections[str(self.hoc_obj.secname(sec=n))]=n
+            self.sections[n.name()]=n
         self.channels={}
         for sec in self.hoc_obj.allsec():
             for seg in sec:
@@ -250,7 +256,6 @@ class modelHandlerNeuron():
         
         setattr(lseg[int(segment)],params,values)
         self.hoc_obj.pop_section()
-
 
     # sets the morphology parameters in the given section
     # one section, but multiple parameters at one time

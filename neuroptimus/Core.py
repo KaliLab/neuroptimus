@@ -419,7 +419,22 @@ class coreModul():
 					fitness=solution[0]
 					self.solutions.append(my_candidate(candidate[:self.option_handler.num_params],fitness))
 			
-			
+			#extracting subfeatures for every candidate		
+			self.features_by_generations = []
+			subfeature_scores=[]
+			current_population = []
+			self.number_of_traces = self.data_handler.number_of_traces()
+			feats = list(self.option_handler.feat_str.split(', '))
+			self.objectives = feats*self.number_of_traces
+			with open(self.option_handler.base_dir+"/subfeature_scores.txt","r") as ind_file:
+				for idx,line in enumerate(ind_file):
+					solution = json.loads(line)
+					candidate=solution[1]
+					feature_scores=solution[0]
+					subfeature_scores.append([candidate[:self.option_handler.num_params],zip(self.objectives,feature_scores)])
+					if not (idx+1)%self.optimizer.size_of_population:
+						self.features_by_generations.append(subfeature_scores)
+						subfeature_scores = []
 			
 			if isinstance(self.solutions[0].fitness,list):
 				for solution in self.solutions:
@@ -590,6 +605,20 @@ class coreModul():
 		f_handler.close()
 		
 		if self.option_handler.algorithm_name != "SINGLERUN":
+			#creating json file for subfeatures
+			subfeatures_json=[]
+			for generation_number,current_generation in enumerate(self.features_by_generations):
+				for individual_number,individual_details in enumerate(current_generation):
+					individual_dict={"generation":generation_number,"individual":individual_number}
+					for k,v in individual_details[1]:
+						if k in individual_dict:
+							individual_dict[k].append(v)
+						else:
+							individual_dict[k] = [v]
+					subfeatures_json.append(individual_dict)
+			with open('subfeature_scores.json', 'w+') as outfile:
+				json.dump(subfeatures_json, outfile, indent=4)
+			#creating metadata json file
 			param_dict = [{"name":value[0],"min_boundary":value[1],"max_boundary":value[2],"optimum":value[3]} for value in param_list]
 			error_dict = [{"name":value[0],"value":value[1],"weight":value[2],"weighted_value":value[3]} for value in tmp_list]  
 			algo_name = self.option_handler.algorithm_name.split("_")

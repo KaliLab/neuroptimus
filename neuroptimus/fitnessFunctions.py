@@ -937,6 +937,7 @@ class fF(object):
         npcandidates=np.asarray(candidates).flatten()
         self.model_trace = []
         self.fitnes = []
+        feature_score=[]
         features = self.option.feats
         weigths = self.option.weights
         if self.option.multi_objective:
@@ -1010,11 +1011,14 @@ class fF(object):
                                 raise sizeError("model: " + str(len(self.model.record[0])) + ", target: " + str(len(self.reader.data.GetTrace(k))))
                             temp_fit.append((f(self.model.record[0],
                                                               self.reader.data.GetTrace(k), args)))
-
+                            feature_score.append((f(self.model.record[0],
+                                                              self.reader.data.GetTrace(k), args))) 
                     else:
                         for f, w in zip(features, weigths):
                             temp_fit.append(self.FFun_for_Features(self.model.record[0],
                                                                 self.reader.features_data, f, k, args))
+                            feature_score.append(self.FFun_for_Features(self.model.record[0],
+                                                                self.reader.features_data, f, k, args)) 
                 else:
                         temp_fit.append(100)
             else:
@@ -1028,19 +1032,25 @@ class fF(object):
                                 raise sizeError("model: " + str(len(self.model.record[0])) + ", target: " + str(len(self.reader.data.GetTrace(k))))
                             temp_fit += w * (f(self.model.record[0],
                                                             self.reader.data.GetTrace(k), args))
+                            feature_score.append((f(self.model.record[0],
+                                                              self.reader.data.GetTrace(k), args)))                                
 
                     else:
                         for f, w in zip(features, weigths):
                             temp_fit += w * self.FFun_for_Features(self.model.record[0],
-                                                                self.reader.features_data, f, k, args)    
+                                                                self.reader.features_data, f, k, args)
+                            feature_score.append(self.FFun_for_Features(self.model.record[0],
+                                                                self.reader.features_data, f, k, args))    
                 else:
                         temp_fit=100
         with open(self.option.base_dir+"/eval.txt", "a") as f: 
             f.write(str([temp_fit,[x for x in npcandidates]])+" \n")
+        with open(self.option.base_dir+"/subfeature_scores.txt", "a") as f: 
+            f.write(str([feature_score,[x for x in npcandidates]])+" \n")
         if self.option.output_level == "1":
             print("current fitness: ",temp_fit)
         if(self.option.simulator == 'Neuron') and delete_model:
-            "Deletes the reference of the instance"
+            #Deletes the reference of the instance
             del self.model
         return [temp_fit]
 
