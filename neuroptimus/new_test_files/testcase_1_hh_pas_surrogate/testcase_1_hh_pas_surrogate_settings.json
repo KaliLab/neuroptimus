@@ -1,0 +1,86 @@
+{
+    "attributes": {
+        "adjusted_params": [
+            "soma 0 hh gnabar_hh",
+            "soma 0 hh gkbar_hh",
+            "soma 0 hh gl_hh"
+        ],
+        "base_dir": "/PATH_TO_MAIN_DIRECTORY/neuroptimus/new_test_files/testcase_1_hh_pas_surrogate/",
+        "boundaries": [
+            [
+                0.001,
+                0.001,
+                1e-05
+            ],
+            [
+                1.0,
+                1.0,
+                0.001
+            ]
+        ],
+        "current_algorithm": {
+            "Cmaes_cmaes": {
+                "number_of_generations": 100,
+                "size_of_population": 100,
+                "number_of_cpu": 1
+            }
+        },
+        "feat_str": "MSE (excl. spikes), Spike count, AP amplitude, AP width",
+        "feats": [
+            "MSE (excl. spikes)",
+            "Spike count",
+            "AP amplitude",
+            "AP width"
+        ],
+        "input_cont_t": true,
+        "input_dir": "/PATH_TO_EXP_DATA/neuroptimus/new_test_files/testcase_1_hh_pas_surrogate/input_data2.dat",
+        "input_freq": 40000.0,
+        "input_length": 1000.0,
+        "input_scale": "mV",
+        "input_size": 1,
+        "model_path": "/PATH_TO_MODEL_FILE/neuroptimus/new_test_files/testcase_1_hh_pas_surrogate/hh_pas.hoc",
+        "model_spec_dir": null,
+        "num_params": 3,
+        "output_level": "0",
+        "param_vals": [
+            0,
+            0,
+            0
+        ],
+        "run_controll_dt": 0.025,
+        "run_controll_pos": 0.5,
+        "run_controll_record": "v",
+        "run_controll_sec": "soma",
+        "run_controll_tstop": 1000.0,
+        "run_controll_vrest": -65.0,
+        "seed": 1235,
+        "sim_command": " ",
+        "simulator": "Neuron",
+        "spike_thres": 0.0,
+        "spike_window": 40.0,
+        "start_time_stamp": 1650568276.6480458,
+        "starting_points": [],
+        "stim_amp": [
+            0.3
+        ],
+        "stim_del": 200.0,
+        "stim_dur": 500.0,
+        "stim_pos": 0.5,
+        "stim_sec": "soma",
+        "stim_type": "IClamp",
+        "type": [
+            "voltage",
+            "voltage",
+            "voltage",
+            "voltage",
+            "voltage"
+        ],
+        "u_fun_string": "",
+        "weights": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+        ]
+    }
+}
