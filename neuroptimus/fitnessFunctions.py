@@ -807,7 +807,11 @@ class fF(object):
                 print(fsum(temp) / len(temp) / (pow(max(exp_t) - min(exp_t), 2)))
         except OverflowError:
                 return 1
-        return fsum(temp) / len(temp) / (pow(max(exp_t) - min(exp_t), 2))
+        
+        if min(exp_t) == max(exp_t):      # if the max and min of the exp data is equal, there is no need for normalization in the calculation of ase
+            return fsum(temp) / len(temp) #/ (pow(max(exp_t) - min(exp_t), 2))
+        else:    
+            return fsum(temp) / len(temp) / (pow(max(exp_t) - min(exp_t), 2))
 
 
     def calc_spike(self, mod_t, exp_t, args):

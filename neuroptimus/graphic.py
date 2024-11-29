@@ -1035,7 +1035,7 @@ class Ui_Neuroptimus(QMainWindow):
         self.lineEdit_posins.setText("0.5")
         self.lineEdit_initv.setText("-65")
         self.lineEdit_dt.setText("0.05")
-        
+        self.setting_tab_unlocked=False
         self.stimprot.addItems(["IClamp","VClamp"])
         self.stimulus_type.addItems(["Step Protocol","Custom Waveform"])
         self.stimulus_type.currentIndexChanged.connect(self.typeChange)
@@ -1682,6 +1682,7 @@ class Ui_Neuroptimus(QMainWindow):
             self.label_26.show()
             self.label_27.show()
             self.load_mods_checkbox.hide()
+            self.tabwidget.setTabEnabled(2,False)
         elif self.dd_type.currentIndex()==2:        
             self.sim_path.show()
             self.sim_param.show()
@@ -1690,6 +1691,7 @@ class Ui_Neuroptimus(QMainWindow):
             self.pushButton_14.hide()
             self.pushButton_15.hide()
             self.pushButton_16.hide()
+            self.tabwidget.setTabEnabled(2,False) #hides settings for external
             self.setter.hide()
             self.remover.hide()
             self.modellist.hide()
@@ -1702,6 +1704,8 @@ class Ui_Neuroptimus(QMainWindow):
             self.load_mods_checkbox.hide()
         else:
             self.pushButton_13.setText(QtCore.QCoreApplication.translate("Neuroptimus", "Load"))
+            if self.setting_tab_unlocked:
+                self.tabwidget.setTabEnabled(2,True)
             self.sim_path.hide()
             self.sim_param.hide()
             self.pushButton_12.hide()
@@ -1732,6 +1736,7 @@ class Ui_Neuroptimus(QMainWindow):
         Load the selected Neuron model and displays the sections in a tablewidget
         """
         self.model_file = self.lineEdit_file2.text()
+        self.setting_tab_unlocked=True
         self.tabwidget.setTabEnabled(2,True)
         self.tabwidget.setTabEnabled(3,True)
         self.tabwidget.setTabEnabled(4,True)
