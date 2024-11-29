@@ -1,0 +1,87 @@
+{
+    "attributes": {
+        "adjusted_params": [
+            "weight",
+            "delay",
+            "tau_rise",
+            "tau_decay"
+        ],
+        "base_dir": "/PATH_TO_MAIN_DIRECTORY/neuroptimus/new_test_files/testcase_2_VClamp_surrogate",
+        "boundaries": [
+            [
+                0.001,
+                0.0,
+                0.001,
+                0.1
+            ],
+            [
+                1.0,
+                5.0,
+                1.0,
+                5.0
+            ]
+        ],
+        "current_algorithm": {
+            "CMAES_CMAES": {
+                "number_of_generations": 100,
+                "size_of_population": 100,
+                "number_of_cpu": 1
+            }
+        },
+        "feat_str": "MSE",
+        "feats": [
+            "MSE"
+        ],
+        "input_cont_t": true,
+        "input_dir": "/PATH_TO_EXP_DATA/neuroptimus/new_test_files/testcase_2_VClamp_surrogate/iclamp_new_evendt.dat",
+        "input_freq": 40000.0,
+        "input_length": 500.0,
+        "input_scale": "mV",
+        "input_size": 1,
+        "model_path": "/PATH_TO_MODEL_FILE/neuroptimus/new_test_files/testcase_2_VClamp_surrogate/simple_hh_syn_vclamp_toopt2.hoc",
+        "model_spec_dir": null,
+        "num_params": 4,
+        "param_vals": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "run_controll_dt": 0.025,
+        "run_controll_pos": 0.5,
+        "run_controll_record": "i",
+        "run_controll_sec": "soma",
+        "run_controll_tstop": 500.0,
+        "run_controll_vrest": -70.0,
+        "seed": 1235,
+        "sim_command": " ",
+        "simulator": "Neuron",
+        "spike_thres": 0.0,
+        "spike_window": 40.0,
+        "start_time_stamp": 1660856382.6140819,
+        "starting_points": null,
+        "stim_amp": [
+            -70.0
+        ],
+        "stim_del": 1.0,
+        "stim_dur": 1.0,
+        "stim_pos": 0.5,
+        "stim_sec": "soma",
+        "stim_type": "VClamp",
+        "type": [
+            "voltage",
+            "voltage",
+            "voltage",
+            "current",
+            "voltage"
+        ],
+        "u_fun_string": "#Please define your function below in the template!\n#You may choose an arbitrary name for your function,\n#but the input parameters must be self and a vector!In the first line of the function specify the length of the vector in a comment!\n#In the second line you may specify the names of the parameters in a comment, separated by spaces.\ndef usr_fun(self,v):\n#4\n#weight\n#delay\n#tau_rise\n#tau_decay\n    h.nc.weight[0] = v[0]\n    h.nc.delay = v[1]\n    h.ampasyn.tau1 = v[2]\n    h.ampasyn.tau2 = v[3]\n",
+        "weights": [
+            1.0
+        ]
+    }
+}
